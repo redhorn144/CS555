@@ -4,11 +4,13 @@
 \usepackage{mdframed}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{placeins}
 
 % copy cs555_hw_template.tex to cs555_hw_1_1.tex
-\newcommand{\yourname}{Your Name}
-\newcommand{\yournetid}{yournetid}
-\newcommand{\hwnum}{1}
+\newcommand{\yourname}{Alex Shaffer, Istiaque Ahmed}
+\newcommand{\yournetid}{aws9, miahmed2}
+\newcommand{\hwnum}{2}
 \newcommand{\probnum}{1}
 
 \newenvironment{problem}[2][Problem]
@@ -24,8 +26,9 @@
 \noindent\rule{\linewidth}{2pt}
 \large\textbf{\yourname} \hfill \textbf{CS 555: Homework \# \hwnum}   \\
 Email: \yournetid@illinois.edu \hfill Spring 2026\\
+\textbf{GitHub Repository:} \url{https://github.com/redhorn144/CS555}
 \noindent\rule{\linewidth}{2pt}
-
+\noindent
 \begin{problem}{\probnum}
 \textcolor{red}{optional: summarize the problem} % TODO
 \end{problem}
@@ -33,41 +36,96 @@ Email: \yournetid@illinois.edu \hfill Spring 2026\\
 \begin{solution}
 
 (a)
+For this part we have implemented a simple the point finite difference stencil to solve Burgers' equation. 
+Plots of the solution for both Chebyshev and uniform nodes are shown in Figures \ref{fig:cheb1a} and \ref{fig:uni1a}, respectively.
+For both of these N is taken to be 200, and the time step is taken to be smaller than the CFL constrint from part c.
+Stapshots of the solution are taken at for $t = 0.1 k, \quad 0 \leq k \leq 20$.
+In these particular cases we can see that the Chebyshev nodes do a better job at resolving the shock in the boundary layer.
+This is because the Chebyshev nodes are clustered more closely together near the boundaries.
+To be consistent with the paper we take $\nu = 1/100\pi$, but to be consistent with the homework handout we take $u^0 = \sin(\pi x)$ instead of $u^0 = -\sin(\pi x)$.
+
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/1a_solution_chebyshev.png}
-    \caption{Your descriptive caption here.}
+    \caption{Solutions to Burgers' equation with Chebyshev nodes.}
     \label{fig:cheb1a}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/1a_solution_uniform.png}
-    \caption{Your descriptive caption here.}
-    \label{fig:uni1a1a}
+    \caption{Solutions to Burgers' equation with uniform nodes.}
+    \label{fig:uni1a}
 \end{figure}
 
+\FloatBarrier
+
 (b)
+Now we are asked to calculate the maximum value of the derivative of $u$ $s(t) = max_{x} |u_x(x,t)|$.
+This is done with N = 200 again for both the uniform nodes and the Chebyshev nodes. 
+The plot of $s(t)$ as well as $s^* = max_{t} s(t)$ is shown in Figures \ref{fig:cheb1b} and \ref{fig:uni1b} for the Chebyshev and uniform nodes, respectively.
+The paper scales $t* = argmax s(t)$ by $\pi$. 
+But without that scaling the analytical values of $s^*$ and $t^*$ are $s^* = 152.00516$ and $t^* = 0.51047$. 
+The Chebyshev node case does notably better for determining $s^*$ and $t^*$.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/1b_smax_chebyshev.png}
+    \caption{Your descriptive caption here.}
+    \label{fig:cheb1b}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/1b_smax_uniform.png}
+    \caption{Your descriptive caption here.}
+    \label{fig:uni1b}
+\end{figure}
+
+\FloatBarrier
+
 
 (c)
 
-%      N            dt    nsteps              s*       rel_err
-%--------------------------------------------------------------
-%     25  3.864938e-03       518       72.284303     5.245e-01
-%     50  1.960784e-03      1020      142.296243     6.387e-02
-%    100  9.900990e-04      2020      151.398113     3.994e-03
-%    200  4.975124e-04      4021      151.977056     1.849e-04
-%    400  2.493766e-04      8021      152.005901     4.878e-06
-%    800  1.248439e-04     16020      152.005832     4.419e-06
-%   1500  6.662225e-05     30020      152.005385     1.481e-06
-%   3000  3.332223e-05     60020      152.005220     3.941e-07
-%   6000  1.666389e-05    120020      152.005176     1.073e-07
-%  10000  9.999000e-06    200020      152.005167     4.552e-08
-%  15000  6.666222e-06    300020      152.005164     2.601e-08
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|r|r|r|r|r|}
+        \hline
+        $N$ & $dt$ & nsteps & $s^*$ & rel\_err \\
+        \hline
+        25    & 3.864938e-03 & 518    & 72.284303  & 5.245e-01 \\
+        50    & 1.960784e-03 & 1020   & 142.296243 & 6.387e-02 \\
+        100   & 9.900990e-04 & 2020   & 151.398113 & 3.994e-03 \\
+        200   & 4.975124e-04 & 4021   & 151.977056 & 1.849e-04 \\
+        400   & 2.493766e-04 & 8021   & 152.005901 & 4.878e-06 \\
+        800   & 1.248439e-04 & 16020  & 152.005832 & 4.419e-06 \\
+        1500  & 6.662225e-05 & 30020  & 152.005385 & 1.481e-06 \\
+        3000  & 3.332223e-05 & 60020  & 152.005220 & 3.941e-07 \\
+        6000  & 1.666389e-05 & 120020 & 152.005176 & 1.073e-07 \\
+        10000 & 9.999000e-06 & 200020 & 152.005167 & 4.552e-08 \\
+        15000 & 6.666222e-06 & 300020 & 152.005164 & 2.601e-08 \\
+        \hline
+    \end{tabular}
+    \caption{Convergence data for various $N$.}
+    \label{tab:convergence}
+\end{table}
+
+\FloatBarrier
 
 (d)
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/1b_cons_smax_chebyshev.png}
+    \caption{Conservation of $s_{\max}$ using Chebyshev nodes.}
+    \label{fig:cheb1b_cons}
+\end{figure}
+
+\FloatBarrier
 
 (e)
+
+\FloatBarrier
+
 \end{solution} 
 
 \end{document}
