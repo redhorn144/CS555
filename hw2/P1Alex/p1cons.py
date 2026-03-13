@@ -1,4 +1,5 @@
 # Solving Burgers equation using a three point finite difference stencil for A and D and bdf3/ext3 for time stepping.
+# Conservation form: N(u) = (1/2) d(u^2)/dx  instead of convective u * du/dx
 # domain [0, 1]
 # initial condition u(x, 0) = sin(pi * x)
 import numpy as np
@@ -12,7 +13,7 @@ from numba import njit
 ################################
 #node_type = "uniform"
 node_type = "chebyshev"
-N     = 200
+N     = 15000
 dt    = 1e-3
 tfinal = 2
 useCFL = True
@@ -111,7 +112,6 @@ def cfl_dt(x, u, cfl=0.1):
 
 #setup
 
-
 x = Nodes(N, node_type)
 A = build_A(x)
 D = build_D(x)
@@ -163,10 +163,10 @@ for n in range(nsteps):
             H_lo, H_diag, H_up = H_bands(b0, A_lo, A_diag, A_up, dt)
             k += 1   # sentinel: k=4 means H bands are already cached
 
-    # Nonlinear advection: N(u) = u * (D @ u)  — O(N) matvec via bands
-    N0 = u_hist[2] * tri_matvec(D_lo, D_up, u_hist[2])
-    N1 = u_hist[1] * tri_matvec(D_lo, D_up, u_hist[1])
-    N2 = u_hist[0] * tri_matvec(D_lo, D_up, u_hist[0])
+    # Nonlinear advection — conservation form: N(u) = (1/2) * D @ (u^2)
+    N0 = 0.5 * tri_matvec(D_lo, D_up, u_hist[2]**2)
+    N1 = 0.5 * tri_matvec(D_lo, D_up, u_hist[1]**2)
+    N2 = 0.5 * tri_matvec(D_lo, D_up, u_hist[0]**2)
 
     # RHS: BDF history + EXT-extrapolated advection
     rhs = -(b1 * u_hist[2] + b2 * u_hist[1] + b3 * u_hist[0]) \
@@ -205,9 +205,9 @@ sm.set_array([])
 fig.colorbar(sm, ax=ax, label='t')
 ax.set_xlabel('x')
 ax.set_ylabel('u(x, t)')
-ax.set_title(f'Burgers equation — N={N}, {node_type} grid, dt={dt}')
+ax.set_title(f'Burgers equation (conservation) — N={N}, {node_type} grid, dt={dt}')
 plt.tight_layout()
-plt.savefig(f"./P1Alex/1a_solution_{node_type}.png", dpi=150)
+plt.savefig(f"./P1Alex/1a_cons_solution_{node_type}.png", dpi=150)
 plt.show()
 
 # 1b: s(t) = max|du/dx|
@@ -222,12 +222,11 @@ ax.scatter([t_hist[i_max]], [s_hist[i_max]], color='r', zorder=5,
            label=f's* = {s_hist[i_max]:.5f}')
 ax.set_xlabel('t')
 ax.set_ylabel('s(t) = max|du/dx|')
-ax.set_title(f's(t) — N={N}, {node_type} grid, dt={dt}')
+ax.set_title(f's(t) conservation — N={N}, {node_type} grid, dt={dt}')
 ax.legend()
 plt.tight_layout()
-plt.savefig(f"./P1Alex/1b_smax_{node_type}.png", dpi=150)
+plt.savefig(f"./P1Alex/1b_cons_smax_{node_type}.png", dpi=150)
 plt.show()
 
 print(f"s*  = {s_hist[i_max]:.5f}")
 print(f"pi t*  = {(t_hist[i_max]*np.pi):.4f}")
-
