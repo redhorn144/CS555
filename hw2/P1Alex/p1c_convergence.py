@@ -88,7 +88,7 @@ def H_bands(b0, A_lo, A_diag, A_up, dt):
 
 def cfl_dt(x, u, cfl=0.1):
     dx_min = 1 / len(x)
-    max_u  = np.max(np.abs(u))
+    max_u  = 1
     if max_u == 0:
         raise ValueError("max|u| = 0")
     return cfl * dx_min / max_u
