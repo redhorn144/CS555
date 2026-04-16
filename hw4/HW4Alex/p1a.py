@@ -6,7 +6,7 @@ from FEM import assemble, build_mesh_uniform, build_R
 L = 1
 c = 1
 N = 100
-nu = 10e-3
+nu = 1e-3
 
 uniform_elements = build_mesh_uniform(N, L=L)
 
@@ -21,15 +21,15 @@ C = R @ C_bar @ R.T
 #steady advection diffusion
 #c u_x - nu u_xx = f
 # Au + Cu = (A + C) u = Bf
-f = np.ones(N - 1)  # source term at interior nodes
-u = sp.sparse.linalg.spsolve(nu * A + C, B @ f)
+RHS = R @ (B_bar @ np.ones(len(uniform_elements)))
+u = sp.sparse.linalg.spsolve(nu * A + C, RHS)
 
 # Analytical solution: -nu u'' + c u' = 1, u(0)=u(1)=0
 # u(x) = (1 - exp(Pe*x)) / (c*(exp(Pe) - 1)) + x/c,  Pe = c/nu
 x = np.linspace(0, L, N + 1)
 x_int = x[1:-1]
 Pe = c / nu
-u_exact = (1 - np.exp(Pe * x_int)) / (c * (np.exp(Pe) - 1)) + x_int / c
+u_exact = x_int / c - (L / c) * np.exp(Pe * (x_int - L))
 
 max_error = np.max(np.abs(u - u_exact))
 print(f"Maximum error vs analytical solution: {max_error:.6e}")
