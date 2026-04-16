@@ -26,7 +26,7 @@ u = sp.sparse.linalg.spsolve(nu * A + C, B @ f)
 
 # Analytical solution: -nu u'' + c u' = 1, u(0)=u(1)=0
 # u(x) = (1 - exp(Pe*x)) / (c*(exp(Pe) - 1)) + x/c,  Pe = c/nu
-x = np.linspace(0, L, E + 1)
+x = geometric_elements
 x_int = x[1:-1]
 Pe = c / nu
 u_exact = (1 - np.exp(Pe * x_int)) / (c * (np.exp(Pe) - 1)) + x_int / c
