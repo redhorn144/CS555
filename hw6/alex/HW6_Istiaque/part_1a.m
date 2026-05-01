@@ -101,26 +101,40 @@ ylabel('y','FontSize',fs);
 zlabel('W*p/p_{max}','FontSize',fs);
 title('Incompressible Case','FontSize',fs);
 drawnow;
+pause;
+
 % PART 1a: Compute Load (F) and Center-of-Pressure (xp)
-
-% The mass matrix 'Bb' integrates the basis functions over the domain.
-% F = \int p(x,y) dx dy
-F = sum(Bb * Pb); 
-
-% xp = (1/F) \int x * p(x,y) dx dy
-% 'x' is the N x 1 vector of nodal x-coordinates already defined in the script
+F  = sum(Bb * Pb);
 xp = (x' * Bb * Pb) / F;
 
 fprintf('--- Part 1a (Taper-Flat Incompressible) ---\n');
 fprintf('Computed Load, F        = %e N\n', F);
 fprintf('Center of Pressure, xp  = %e m\n', xp);
 
-% VERIFICATION: Analytical 1D Wedge Load (F_tilde)
-
-alpha = h1 / h2;
-Lambda = 6 * mu * U * L / (h2^2);
-
-% F_tilde formula from the assignment
+% VERIFICATION: Re-solve with wedge config (Ta=0, Neumann on top/bottom)
+% to show F_numerical matches the analytical F_tilde.
+alpha   = h1 / h2;
+Lambda  = 6 * mu * U * L / (h2^2);
 F_tilde = (Lambda * L * W) / (1 - alpha)^2 * (log(alpha) + 2 * (1 - alpha) / (1 + alpha));
 
-fprintf('Analytical Load, F_tilde = %e N\n\n', F_tilde);
+Ta_v  = 0;
+he_v  = profile_taper_flat(xe, L, T, Ta_v, h1, h2);
+nu_v  = spdiags((1./(12*mu))*he_v.^3, 0, E, E);
+An_v  = kron(nu_v, speye(3)) * AL;
+
+hL_v  = profile_taper_flat(xL, L, T, Ta_v, h1, h2);
+hq_v  = Jq * hL_v;
+Uh_v  = (U/2) * (Bq .* hq_v);
+ULr_v = spdiags(reshape(Rx.*Uh_v, nq*E, 1), 0, nq*E, nq*E);
+ULs_v = spdiags(reshape(Sx.*Uh_v, nq*E, 1), 0, nq*E, nq*E);
+Cb_v  = Q' * (DLr*ULr_v + DLs*ULs_v) * JL * Q;
+
+R_v   = restriction(nb, unique([find(abs(x) < 1e-10); find(abs(x - L) < 1e-10)]));
+P_v   = (R_v*(Q'*An_v*Q)*R_v') \ (R_v*(Cb_v*ones(nb,1)));
+Pb_v  = R_v' * P_v;
+F_v   = sum(Bb * Pb_v);
+
+fprintf('\n--- Verification (Ta=0, Neumann top/bottom) ---\n');
+fprintf('Numerical Load (wedge), F = %e N\n', F_v);
+fprintf('Analytical Load, F_tilde  = %e N\n', F_tilde);
+fprintf('Relative Error            = %.2f%%\n\n', 100*abs(F_v - F_tilde)/F_tilde);

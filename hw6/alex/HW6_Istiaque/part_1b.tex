@@ -13,7 +13,7 @@
 \begin{document}
 \maketitle
 
-\section*{Problem Setup}
+\subsection*{Problem Setup}
 To verify the finite element solver against the analytical solution for a 1D wedge bearing, the physical parameters were adjusted to represent a pure wedge. Specifically, the leading taper angle was set to zero ($T_a = 0$), and Neumann boundary conditions were enforced on the top and bottom edges of the domain. This was achieved by applying Dirichlet boundary conditions ($p=0$) exclusively to the leading ($x=0$) and trailing ($x=L$) edges, thus forcing a strictly 1D flow in the $x$-direction.
 
 The analytical solution for the 1D wedge bearing is given by:
@@ -22,7 +22,7 @@ The analytical solution for the 1D wedge bearing is given by:
 \end{equation}
 where $\alpha = h_1/h_2$, $H(x) = \alpha + (1-\alpha)(x/L)$, and $\Lambda = 6\mu UL/h_2^2$.
 
-\section*{Convergence Study Results}
+\subsection*{Convergence Study Results}
 A mesh refinement study was performed by varying the number of elements in the $x$-direction ($E_x \in \{15, 30, 60, 120\}$) while keeping $E_y = 40$ constant. The maximum pointwise error between the numerical solution $p(x)$ and the analytical solution $\tilde{p}(x)$ was computed for each mesh resolution.
 
 \begin{table}[H]
@@ -43,7 +43,7 @@ A mesh refinement study was performed by varying the number of elements in the $
 
 The estimated convergence rate, calculated from the slope of the log-log plot of the error versus $E_x$, is approximately \textbf{$-1.90$}. This value is close to $-2.0$, successfully demonstrating the expected second-order convergence of the linear triangular elements for this problem.
 
-\section*{Figures}
+\subsection*{Figures}
 Figure \ref{fig:pressure_1d} shows the pressure distribution, while Figure \ref{fig:convergence} illustrates the convergence behavior of the finite element solver.
 
 \begin{figure}[H]
