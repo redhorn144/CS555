@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{float}
+\geometry{a4paper, margin=1in}
+
+\title{Homework 6 - Part 2b: Pressure Distribution Comparison}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part 2b: Side-by-Side Comparison}
+Figure \ref{fig:comparison} presents a side-by-side comparison of the normalized pressure distributions for the three configurations analyzed in this study: the 2D incompressible taper-flat slider (Case 1a), the 1D incompressible pure wedge (Case 1b), and the 2D compressible taper-flat slider (Case 2a).
+
+\subsection*{Analysis of Pressure Ranges and Distributions}
+While all three subplots in Figure \ref{fig:comparison} are visually normalized by their respective maximum pressures ($p_{max}$) to clearly illustrate their profile shapes, their physical magnitudes differ significantly due to the underlying physics and boundary conditions:
+
+\begin{itemize}
+    \item \textbf{Case 1a (Incompressible 2D Taper-Flat):} The peak pressure is relatively low. The 2D nature of the domain allows fluid to ``leak'' out of the side edges ($y$-direction), relieving pressure. Furthermore, the $1^\circ$ leading taper delays the aggressive narrowing of the gap, limiting the pressure buildup at the entrance.
+    \item \textbf{Case 1b (Incompressible 1D Wedge):} The maximum pressure is substantially higher than the 2D cases. This is primarily because the Neumann boundary conditions enforce strictly 1D flow, completely preventing any side leakage. Additionally, the removal of the leading taper means the geometric wedge acts over the full length of the slider, squeezing the fluid much more intensely from the very beginning.
+    \item \textbf{Case 2a (Compressible 2D Taper-Flat):} The peak pressure is higher than its incompressible 2D equivalent (Case 1a). As the fluid is subjected to high pressures, its density increases, causing the fluid to effectively ``stiffen.'' This compressibility effect also alters the shape of the distribution slightly, shifting the peak pressure further toward the trailing edge compared to the incompressible case.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{part_2b}
+    \caption{Side-by-side comparison of the pressure distributions for Cases 1a, 1b, and 2a. Note the difference in maximum pressure ($p_{max}$) magnitudes, particularly the increase in the 1D case.}
+    \label{fig:comparison}
+\end{figure}
+
+\end{document}

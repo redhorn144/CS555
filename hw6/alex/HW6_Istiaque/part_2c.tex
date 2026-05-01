@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{booktabs}
+\geometry{a4paper, margin=1in}
+
+\title{Homework 6 - Part 2c: Final Load and Center of Pressure Analysis}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part 2c: Summary and Findings}
+Table \ref{tab:final_results} summarizes the computed load ($F$) and the normalized center of pressure ($x_p/L$) for the three slider configurations modeled in this assignment.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Configuration Case} & \textbf{Load $F$ (N)} & \textbf{Center of Pressure $x_p/L$} \\
+        \midrule
+        \textbf{1a:} Incompressible 2D Taper-Flat & $0.2067$ & $0.5387$ \\
+        \textbf{1b:} Incompressible 1D Pure Wedge & $8.1541$ & $0.5391$ \\
+        \textbf{2a:} Compressible 2D Taper-Flat   & $0.2783$ & $0.5352$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{Comparison of the lifting load and normalized center of pressure across different fluid and geometric assumptions.}
+    \label{tab:final_results}
+\end{table}
+
+\subsection*{Discussion of Findings}
+Based on the results in Table \ref{tab:final_results}, several key physical insights can be drawn regarding the modeling of air bearings:
+
+\begin{itemize}
+    \item \textbf{The Impact of Side Leakage (1D vs. 2D):} 
+    The 1D wedge model (Case 1b) predicts a load of $8.1541$ N, which is nearly 40 times larger than the realistic 2D model (Case 1a). By artificially restricting the flow to a single dimension (Neumann boundaries), the fluid cannot escape laterally. This creates an intense, artificial pressure ridge, grossly overestimating the slider's load-carrying capacity. This demonstrates why 2D modeling is strictly necessary for finite-width sliders.
+    
+    \item \textbf{The Effect of Compressibility (Case 1a vs. Case 2a):} 
+    Introducing the compressible Reynolds equation (Case 2a) results in a load of $0.2783$ N, an increase of approximately 34\% over the incompressible baseline (Case 1a). As the air is squeezed into the narrow trailing gap, its absolute pressure rises, which proportionally increases the fluid density. This localized densification ``stiffens'' the air film, allowing it to generate more lift under the exact same geometric and kinematic conditions.
+    
+    \item \textbf{Stability of the Center of Pressure:} 
+    Despite the massive variations in predicted load magnitudes, the normalized center of pressure ($x_p/L$) remains highly stable across all three models, situated at approximately $53.5\%$ to $53.9\%$ of the slider's length. The force consistently acts slightly downstream of the geometric center, which is characteristic of the wedge-like geometry squeezing fluid toward the trailing edge. 
+\end{itemize}
+
+\end{document}

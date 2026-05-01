@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{booktabs}
+\geometry{a4paper, margin=1in}
+
+\title{Homework 6 - Part 2: Compressibility Effects in Slider Bearings}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part 2a: Compressible Reynolds Equation}
+In this section, we account for the compressibility of air as peak pressures rise significantly above ambient conditions. Under the isothermal assumption, the fluid density is proportional to the absolute pressure $p_a = p + p_{atm}$. The resulting compressible Reynolds equation is nonlinear:
+
+\begin{equation}
+    -\nabla \cdot \left( \frac{p_a h^3}{12\mu} \nabla p \right) + \frac{1}{2} \nabla \cdot (uhp) = -\frac{p_{atm}}{2} \nabla \cdot (uh)
+\end{equation}
+
+where $p$ is the relative pressure and $p=0$ on the boundary $\partial \Omega$.
+
+\subsection*{Iterative Solution Methodology}
+The nonlinearity in the stiffness matrix $\bar{A}(p_a)$ was treated using a successive iteration strategy. Starting with an initial guess of $p_a = p_{atm}$, the system was iterated using:
+\begin{equation}
+    R(\bar{A}(p_a) - \bar{C})R^T \underline{p} = R\bar{C}\underline{\bar{p}}_{atm}
+\end{equation}
+The solution reached convergence (maximum pressure change $< 10^{-3}$) in 13 iterations.
+
+\subsection*{Results}
+The following parameters and computed values characterize the compressible taper-flat configuration:
+
+\begin{itemize}
+    \item \textbf{Trailing height ($h_2$):} $2.500 \times 10^{-7}$ m
+    \item \textbf{Pitch ($\gamma$):} $2.927 \times 10^{-5}$ radians
+    \item \textbf{Computed Load ($F$):} $0.27828$ N
+    \item \textbf{Center of Pressure ($x_p$):} $2.194 \times 10^{-3}$ m
+\end{itemize}
+
+\section*{Pressure Distribution}
+The absolute pressure distribution for the compressible case is shown in Figure \ref{fig:part_2a}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{part_2a}
+    \caption{Pressure distribution for the compressible taper-flat slider configuration.}
+    \label{fig:part_2a}
+\end{figure}
+
+\end{document}

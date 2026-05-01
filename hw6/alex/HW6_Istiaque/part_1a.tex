@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\title{Homework 6 - Part 1a: Incompressible Taper-Flat Slider}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Results}
+For Part 1a, the pressure distribution for the 2D incompressible taper-flat slider bearing was computed using the Finite Element Method. 
+The load $F$ and the center-of-pressure $x_p$ were calculated using the following integrals over the domain $\Omega$:
+\begin{align*}
+    F &= \int_{\Omega} p(x,y) \, dx \, dy \\
+    x_p &= \frac{1}{F} \int_{\Omega} x \, p(x,y) \, dx \, dy
+\end{align*}
+
+Using the numerical solution, the computed values are:
+\begin{itemize}
+    \item \textbf{Computed Load ($F$):} $0.2066599$ N
+    \item \textbf{Center of Pressure ($x_p$):} $0.002208667$ m
+\end{itemize}
+
+\section*{Analytical Verification}
+The analytical load $\tilde{F}$ for a 1D pure wedge configuration is given by:
+\begin{equation*}
+    \tilde{F} = \frac{\Lambda L W}{(1-\alpha)^2} \left( \ln(\alpha) + 2 \frac{1-\alpha}{1+\alpha} \right)
+\end{equation*}
+where $\alpha = h_1/h_2$ and $\Lambda = 6\mu U L / h_2^2$.
+
+Substituting the given parameters, we obtain:
+\begin{itemize}
+    \item \textbf{Analytical Load ($\tilde{F}$):} $8.154767$ N
+\end{itemize}
+
+\vspace{0.5cm}
+\noindent\textit{Note:} The significant difference between the numerical load ($0.207$ N) and the analytical load ($8.15$ N) is expected. The numerical model simulates a 2D slider with a $1^{\circ}$ leading taper, whereas the analytical formula assumes a 1D, perfectly flat, full-length wedge.
+
+\section*{Pressure Distribution}
+The numerical pressure distribution $p(x,y)$ over the slider domain is shown in Figure \ref{fig:pressure}.
+
+\begin{figure}[ht!]
+    \centering
+    % Since your image is uploaded as part_1a.jpg, this will link it automatically
+    \includegraphics[width=0.8\textwidth]{part_1a}
+    \caption{Normalized pressure distribution for the incompressible taper-flat slider bearing.}
+    \label{fig:pressure}
+\end{figure}
+
+\end{document}
